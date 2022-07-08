@@ -10,6 +10,7 @@ Flask==2.0.3
 Flask-Session==0.4.0
 fonttools==4.29.1
 google-cloud==0.34.0
+gunicorn==20.1.0
 idna==3.3
 importlib-metadata==4.11.1
 itsdangerous==2.1.0
