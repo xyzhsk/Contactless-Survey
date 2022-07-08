@@ -1,0 +1,389 @@
+{% extends "index1.html" %}
+
+{% block content %}
+
+<!-- logo -->
+<img src="http://127.0.0.1:5000/static/images/logo.png" alt="" class="site-logo">
+
+<div class="survey-app-container">
+
+  <div class="w-100">
+
+    <!-- logo section -->
+    <div class="container-fluid logo-wrapper is-centered d-flex justify-content-center align-items-center">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 text-center px-0">
+          <div id="top-intro-section">
+            <h1 class="welcome-text custom-fade" style="display: none;">Welcome to <br>Contact Less Survey</h1>
+            <h2 class="welcome-sub-text font-open-sans custom-fade" style="display: none;">Participate in a 20 seconds <span>100% Contact Less</span> survey</h2>
+          </div>
+          <div id="question-section"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- main section -->
+    <div class="main-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex align-items-stretch">
+            <div class="survey-content w-100 text-center">
+              
+              <!-- ************** NEW SURVEY METHOD ************** -->
+
+              <!-- survey start confirmation part 1 -->
+              <div class="survey-start-confirmation">
+                <h4>Would you like to start the survey?</h4>
+              </div>
+
+              <!-- survey start countdown -->
+              <div id="count-down" style="display: none;"><h2 class="count-down-text">Survey starts in <span>3</span></h2></div>
+
+              <!-- video container -->
+              <div class="video-container">
+                <div class="video-wrapper">
+                  <img src="{{ url_for('video_feed') }}" class="img-fluid w-100" alt="live_streaming" title="live streaming" id="obj_detect">
+
+                  <div class="video-overlay" style="display: none;">
+
+                    <div>
+                      <!-- Thank you box -->
+                      <div id="alert-message" style="display: none;">
+                        <img src="http://127.0.0.1:5000/static/images/done.png" class="mx-auto mb-4" alt="success" width="90">
+                        <h2>Thank you</h2>
+                      </div>
+                      <!-- loader -->
+                      <div class="loader" id="loader">
+                        <svg class="circular" viewBox="25 25 50 50">
+                          <circle class="path" cx="50" cy="50" r="20" fill="none" stroke="#50aeec" stroke-width="2" stroke-miterlimit="10"/>
+                        </svg>
+                      </div>
+                      <!-- submit text -->
+                      <small style="display: none;">Submitting your survey...</small>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- survey start confirmation part 2 -->
+              <div class="survey-start-confirmation instructions">
+                <div class="hand-gesture-container hide-on-survey-start">
+                  <img src="http://127.0.0.1:5000/static/images/arrow-up.png" class="arrow" />
+                  <img src="http://127.0.0.1:5000/static/images/Thumb Up.png" class="thumbs" alt="Thumb Up">
+                </div>
+
+                <div class="start-instruction font-open-sans hide-on-survey-start">
+                  <small>Show thumb up to start</small>
+                </div>
+              </div>
+
+              <!-- survey question container -->
+              <div id="survey-question"></div>
+
+              <!-- thank you text -->
+              <div class="thankyou-text" style="display: none;">You have successfully completed the survey</div>
+
+              <!-- survey question wrapper -->
+              <!-- <div class="survey-question-wrapper" style="display: none"> -->
+
+                <!-- start survey button -->
+                <!-- <button id="btn-start-survey" class="btn btn-primary btn-lg text-uppercase" onclick="startSurvey()">Start Survey &nbsp; <i class="fas fa-angle-double-right"></i></button> -->
+
+              <!-- </div> -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ** end of main section * -->
+
+  </div>
+</div>
+<div class="survey-footer" style="display: none;">
+  <p>&copy; 2021 All rights reserved. A product of ABC Company, India</p>
+</div>
+
+<!-- script -->
+<script type="text/JavaScript">
+
+let current_question_set;
+let current_state = 1;
+let given_answer = {};
+let client_survey_data = {};
+
+$(document).ready(function() {
+
+  /** fadein animation */
+  setTimeout(() => {
+    $(".custom-fade").fadeIn();
+  }, 500);
+
+  /** decrese height animation */
+  setTimeout(() => {
+    // $(".logo-wrapper").css('min-height', '300px');
+    windowRotate();
+  }, 2500);
+
+  /** other animations */
+  setTimeout(() => {
+    $(".survey-footer").fadeIn();
+  }, 3000);
+
+
+  setTimeout(() => {
+    /** start survey confirmation on load */
+    surveyStartConfirmation();
+  }, 5000);
+  
+})
+
+/** survey start confirmation */
+surveyStartConfirmation = () => {
+  
+  $(".video-overlay").show();
+  $("#loader").show();
+
+  //subham $(".hide-on-survey-start").hide();
+  //subham $(".survey-start-confirmation h4").text("Please wait...");
+
+  /** get IP & location */
+  $.getJSON('http://ip-api.com/json?callback=?', (data) => {
+    /** get IP, Location, Lat + Long, ISP provider and much more from DATA */
+    client_survey_data.location = data.city;
+    client_survey_data.ip_address = data.query;
+
+    /** send start survey request to server */
+    $.ajax({
+      type: "POST",
+      url: "/survey_start",
+      data: client_survey_data, //sending only the IP & location for now .. (send anything in that object)
+      dataType: "json",
+      crossDomain: true,
+      success: (res) => {
+
+        if(res.start_survey) {
+
+          /** generate session (Base64 encoded) using Date to make unique */
+          let _time = new Date();
+          let session = btoa(_time);
+          client_survey_data.user = session;
+          /** store session to browser */
+          sessionStorage.setItem('user', session);
+
+          $(".hide-on-survey-start").hide();
+          $(".survey-start-confirmation h4").text("Please wait...");
+          $("#loader").hide();
+          $(".video-overlay").hide();
+
+          $(".survey-start-confirmation").hide();
+          // $(".survey-question-wrapper").show();
+
+          startSurvey();
+        }
+
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    });
+
+  });
+}
+
+/** start survey */
+startSurvey = () => {
+
+  /** demo data */
+  let _data = {"receive_confirmation": "nok", "state": current_state, "question": 0, "user": "Preetam"};
+  //let _data = {"state": current_state, "user": "Preetam"}; // send session in this object to server
+  $(".video-overlay").show();
+  $("#loader").show();
+
+  /** ajax request to fetch 1st survey question */
+  $.ajax({
+    type: "POST",
+    url: "/survey",
+    data: _data,
+    dataType: "json",
+    crossDomain: true,
+    success: (res) => {
+      $("#loader").hide();
+      $(".video-overlay").hide();
+
+      //if request made successful then the response represent the data from server
+      //console.log(res);
+      if(res.survey_status == "ongoing") {
+        $("#btn-start-survey").hide();
+        $("#count-down").show();
+        $(".video-overlay").show();
+
+        //obj.testVar = 15;
+
+        /** this section contains only the countdown timer */
+        let timeleft = 2;
+        let countdownTimer = setInterval(() => {
+          if(timeleft <= 0){
+            clearInterval(countdownTimer);
+
+            current_question_set = res.question;
+            renderQuestion(res.question);
+
+            $("#top-intro-section").hide();
+            current_state += 1;
+            $("#count-down").hide();
+            $(".video-overlay").fadeOut();
+
+            /** send question number confirmation after question receive */
+            questionReceiveConfirmation();
+
+          }
+          $("#count-down h2 span").text(timeleft);
+          timeleft -= 1;
+        }, 1000);
+        
+      }
+    },
+    error: (err) => {
+      console.log(err)
+    }
+  });
+}
+
+/** question receive confirmation & get answer of the question from response */
+questionReceiveConfirmation = () => {
+
+//  let static_data = { "receive_confirmation": true, "question": current_state - 1 }
+  let static_data = { "receive_confirmation": "ok", "state" : current_state , "question": current_state - 1 } 
+  $.ajax({
+    type: "POST",
+    url: "/survey",
+    data: static_data,
+    dataType: "json",
+    crossDomain: true,
+    success: (res) => {
+      //console.log("response => ", res);
+      /** renders answer */
+      renderAnswer(res.gesture);
+
+      /* whenever response comes, trigger nextQuestion() function after 1 seconds */
+      setTimeout(() => {
+        nextQuestion();
+      }, 10);
+      
+    },
+    error: (err) => {
+      console.log(err)
+    }
+  });
+}
+
+/** render question method */
+renderQuestion = (set) => {
+  let question = '';
+  let options = '';
+
+  question += '<label class="mb-3">Question '+ current_state +'</label>';
+  question += '<h4>'+ set.q1 +'</h4>';
+
+  options += '<div id="options">';
+  for(var i=0; i < set.options1.length; i++) {
+    let visual_text = set.options1[i] === 'Thumb Up' ? 'Yes' : set.options1[i] === 'Thumb Down' ? 'No' : 'Neutral';
+    fl=set.options1[i]+'.png';	
+    options += '<span class="d-inline-block"><img src="http://127.0.0.1:5000/static/images/'+fl+'" class="img-fluid" width="90" /><small>'+ visual_text +'</small></span>'
+  }
+  options += '</div>';
+
+  document.getElementById("question-section").innerHTML = question;
+  document.getElementById("survey-question").innerHTML = options;
+}
+
+/** render answer method */
+renderAnswer = (ans) => {
+  let answer = '';
+  let visual_text = ans === 'Thumb Up' ? 'Yes' : ans === 'Thumb Down' ? 'No' : ans === 'Neutral' ? 'indifferent' : 'Not Sure';
+   fl=ans +'.png';
+  answer += '<span class="d-inline-block mr-4"><img src="http://127.0.0.1:5000/static/images/'+ fl + '" class="img-fluid" width="120" /><small class="bigger">'+ visual_text +'</small></span>';
+  document.getElementById("options").innerHTML = answer;
+}
+
+/** submit answer method */
+nextQuestion = () => { // ***** previously the method name was submitAnswer()
+
+  if(sessionStorage.getItem("user") && client_survey_data.user === sessionStorage.getItem("user")) {
+
+//    let _answer_data = {"state": current_state};
+    let _answer_data = {"receive_confirmation": "nok", "state" : current_state , "question": current_state-1};
+    $(".video-overlay").show();
+    $("#loader").show();
+
+    $.ajax({
+      type: "POST",
+      url: "/survey",
+      data: _answer_data,
+      dataType: "json",
+      crossDomain: true,
+      success: (res) => {
+        //console.log(res);
+        $("#loader").hide();
+        $(".video-overlay").hide();
+
+        if(res.survey_status == "complete") {
+          $("#survey-question").hide();
+          $(".video-overlay").show();
+          $("#alert-message").show();
+          $(".thankyou-text").fadeIn();
+
+          $("#question-section").hide();
+          $("#top-intro-section").fadeIn();
+
+          /** remove user session */
+          sessionStorage.removeItem("user");
+
+          /** restart survey (reload location) */
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+        } else {
+          current_question_set = res.question;
+          renderQuestion(res.question);
+          current_state += 1;
+
+          /** tell server if you received question */
+          questionReceiveConfirmation();
+        }
+
+        $(".answer").val("");
+        $("#your-answer").hide();
+        given_answer = {};
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    });
+
+  } else {
+    alert("Oops! Session expired");
+    /** restart survey (reload location) */
+    window.location.reload();
+  }
+}
+
+/** window rotate confirmation */
+window.addEventListener("orientationchange", function(event) {
+  setTimeout(() => {
+    windowRotate();
+  }, 500);
+});
+windowRotate = () => {
+  if(window.innerHeight > window.innerWidth){
+    $(".logo-wrapper").css('min-height', '300px');
+  } else {
+    $(".logo-wrapper").css('min-height', '235px');
+  }
+}
+</script>
+  
+{% endblock %}

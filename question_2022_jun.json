@@ -1,0 +1,247 @@
+{
+  "questions": [
+    {
+      "question": [
+        {
+          "text": "Are you happy?",
+          "language": "en"
+        }
+      ],
+      "aiType": "Gesture",
+      "options": [
+        {
+          "oId": "76e8900c-ebcb-434b-82fa-81ee848744a9",
+          "text": "Yes (English)",
+          "language": "en",
+          "image": {
+            "name": "thumb_up.png'",
+            "image": "test",
+            "customer": "test"
+          },
+          "value": "Thumbs Up"
+        },
+        {
+          "oId": "f33ba763-a5db-4f4e-8fb2-596dea770d8c",
+          "text": "No (English)",
+          "language": "en",
+          "image": {
+            "customer": "test",
+            "image": "test",
+            "name": "thumb_down.png'"
+          },
+          "value": "Thumbs Down"
+        },
+        {
+          "oId": "5c192e28-a64b-477f-aa69-9c58aabec8da",
+          "text": "Maybe(English)",
+          "language": "en",
+          "image": {
+            "name": "neutral.png'",
+            "customer": "test",
+            "image": "test"
+          },
+          "value": "Neutral"
+        }
+        ],
+      "qId": "f1d2f290-2092-4923-a3e0-0b311e5b9e3d",
+      "action": {
+        "name": "updated action",
+        "status": true,
+        "customer": "test",
+        "webhook": {
+          "password": "passwordupda",
+          "login": "loginid",
+          "instance": "instancetext"
+        },
+        "type": "action",
+        "service": "SERVICE NOW ACTION"
+      },
+      "alert": {
+        "name": "slack",
+        "status": true,
+        "customer": "test",
+        "service": "Slack",
+        "webhook": "test",
+        "type": "alert"
+      },
+      "csat": true,
+      "nps": false,
+      "sound": {
+        "customer": "test",
+        "soundLink": "test",
+        "name": "test sound"
+      }
+    },
+    {
+      "question": [
+        {
+          "text": "How much you rate our services?",
+          "language": "en"
+        }
+      ],
+      "aiType": "Count",
+      "options": [
+        {
+          "oId": "cd062b05-88f6-48c2-a322-3ef29bfcf80f",
+          "text": "1(English)",
+          "language": "en",
+          "image": {
+            "name": "1 - Not likely at all.png'",
+            "customer": "test",
+            "image": "test"
+          },
+          "value": "1"
+        },
+        {
+          "oId": "4cba6192-f947-42da-895b-de85c2c1e708",
+          "text": "2(English)",
+          "language": "en",
+          "image": {
+            "name": "2 - Not likely.png'",
+            "image": "test",
+            "customer": "test"
+          },
+          "value": "2"
+        },
+        {
+          "oId": "93adc1b5-6d07-471c-8ea7-3f2dd894ea3e",
+          "text": "3(English)",
+          "language": "en",
+          "image": {
+            "name": "3- Average.png'",
+            "image": "test",
+            "customer": "test"
+          },
+          "value": "3"
+        },
+        {
+          "oId": "b3e8f054-ba28-4230-a55e-892987e60b1e",
+          "text": "4(English)",
+          "language": "en",
+          "image": {
+            "customer": "VS2vtwIJx8o7bsXCgDJ7",
+            "name": "4 - Likely.png'",
+            "image": "test"
+          },
+          "value": "4"
+        },
+        {
+          "oId": "a42917ab-a226-408a-851a-7bf22d1a9d61",
+          "text": "5(English)",
+          "language": "en",
+          "image": {
+            "customer": "VS2vtwIJx8o7bsXCgDJ7",
+            "image": "test",
+            "name": "5- Excellent.png'"
+          },
+          "value": "5"
+        }
+      ],
+      "qId": "64b7fafb-c715-40f4-bc4d-03fb0cd374fb",
+      "action": {
+        "webhook": {
+          "instance": "instancetext",
+          "password": "passwordupda",
+          "login": "loginid"
+        },
+        "status": true,
+        "type": "action",
+        "name": "updated action",
+        "customer": "test",
+        "service": "SERVICE NOW ACTION"
+      },
+      "alert": {
+        "customer": "test",
+        "service": "Microsoft Teams",
+        "type": "alert",
+        "webhook": "urlmicro",
+        "status": true,
+        "name": "microsofturl"
+      },
+      "csat": false,
+      "nps": true,
+      "sound": {
+        "name": "sound2",
+        "soundLink": "test",
+        "customer": "test"
+      }
+    },
+    {
+      "question": [
+        {
+          "text": "Overall experience",
+          "language": "en"
+        } ],
+      "aiType": "Gesture",
+      "options": [
+        {
+          "oId": "6c05cfaa-c74d-4e8d-ada7-4b9c1516a1f9",
+          "text": "thumbs up",
+          "language": "en",
+          "image": {
+            "name": "thumb_up.png'",
+            "image": "test",
+            "customer": "test"
+          },
+          "value": "Thumbs Up"
+        },
+        {
+          "oId": "bff26b7b-4d6a-4f87-b504-1ff82265b588",
+          "text": "thumbs down",
+          "language": "en",
+          "image": {
+            "customer": "test",
+            "name": "thumb_down.png'",
+            "image": "test"
+          },
+          "value": "Thumbs Down"
+        },
+        {
+          "oId": "ce63c0ef-1a57-4f6d-8b1f-a5035e31e4b6",
+          "text": "neutral",
+          "language": "en",
+          "image": {
+            "customer": "test",
+            "image": "test",
+            "name": "neutral.png'"
+          },
+          "value": "Neutral"
+        }
+      ],
+      "qId": "0c688ab1-1950-4cb9-9d29-0d0108290931",
+      "action": {
+        "webhook": {
+          "login": "loginid",
+          "instance": "instancetext",
+          "password": "passwordupda"
+        },
+        "service": "SERVICE NOW ACTION",
+        "name": "updated action",
+        "type": "action",
+        "status": true,
+        "customer": "test"
+      },
+      "alert": {
+        "status": true,
+        "name": "microsofturl",
+        "customer": "VS2vtwIJx8o7bsXCgDJ7",
+        "service": "Microsoft Teams",
+        "webhook": "urlmicro",
+        "type": "alert"
+      },
+      "csat": false,
+      "nps": false,
+      "sound": {
+        "name": "test sound",
+        "customer": "test",
+        "soundLink": "test"
+      }
+    }
+  ],
+  "quesSet": {
+    "questionSet": "zSmiy57fb2R6DSyb8xNv"
+  },
+  "faceBlurring": {
+    "faceBlurring": true
+  }
+}

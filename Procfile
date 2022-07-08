@@ -1,0 +1,1 @@
+web: gunicorn gesture_based_survey:app --log-file -
